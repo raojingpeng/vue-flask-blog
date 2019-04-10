@@ -5,8 +5,10 @@
     :email: withrjp@gmail.com
 """
 from flask import Blueprint, jsonify
+from flask_cors import CORS
 
 api_bp = Blueprint('api', __name__)
+CORS(api_bp)
 
 
 @api_bp.route('/ping')
