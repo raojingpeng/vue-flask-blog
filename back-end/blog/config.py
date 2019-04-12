@@ -10,7 +10,6 @@ basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 
 
 class BaseConfig(object):
-    SECRET_KEY = os.getenv('SECRET_KEY', 'No one can hide from my sight')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
