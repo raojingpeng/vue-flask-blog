@@ -23,18 +23,18 @@
                     <button class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
                 </form>
 
-                <ul v-if="shareStore.is_authenticated" class="nav navbar-nav navbar-right">
+                <ul v-if="sharedState.is_authenticated" class="nav navbar-nav navbar-right">
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">Messages</a>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/profile" class="nav-link">Profile</router-link>
+                        <router-link :to="{ name: 'Profile', params: { id: sharedState.user_id }}" class="nav-link">Profile</router-link>
                     </li>
                     <li class="nav-item">
                         <a @click="handleLogout" class="nav-link" href="#">Logout</a>
                     </li>
                 </ul>
-                 <ul v-if="!shareStore.is_authenticated" class="nav navbar-nav navbar-right">
+                 <ul v-else class="nav navbar-nav navbar-right">
                     <li class="nav-item">
                         <router-link to="/login" class="nav-link">Login</router-link>
                     </li>
@@ -51,13 +51,14 @@
         name: 'Navbar', //this is the name of the component
         data () {
             return {
-                shareStore: store.state
+                sharedState: store.state
             }
         },
         methods: {
             handleLogout: function () {
                 store.logoutAction()
-                this.$router.push('login')
+                this.$toasted.success(`Welcome ${name}!`, { icon : 'fingerprint' })
+                this.$router.push('/login')
             }
         }
     }

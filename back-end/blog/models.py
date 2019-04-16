@@ -4,10 +4,9 @@
     :github: https://github.com/raojingpeng
     :email: withrjp@gmail.com
 """
-import os
-import base64
+import jwt
 from datetime import datetime, timedelta
-from flask import url_for
+from flask import url_for, current_app
 from blog.extensions import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -41,9 +40,8 @@ class User(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
-    token = db.Column(db.String(32), index=True, unique=True)
-    token_expiration = db.Column(db.DateTime)
     password_hash = db.Column(db.String(128))
+    last_access = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -51,26 +49,29 @@ class User(PaginatedAPIMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def get_token(self, expires_in=3600):
+    def get_jwt(self, expires_in=600):
         now = datetime.utcnow()
-        if self.token and self.token_expiration > now + timedelta(seconds=60):
-            return self.token
-        self.token = base64.b64encode(os.urandom(24)).decode('utf-8')
-        self.token_expiration = now + timedelta(seconds=expires_in)
-        db.session.add(self)
+        payload = {
+            'user_id': self.id,
+            'username': self.username,
+            'exp': now + timedelta(seconds=expires_in),
+            'iat': now
+        }
 
-        return self.token
-
-    def revoke_token(self):
-        self.token_expiration = datetime.utcnow() - timedelta(seconds=1)
+        return jwt.encode(payload, current_app.config['SECRET_KEY'], algorithm='HS256').decode('utf-8')
 
     @staticmethod
-    def check_token(token):
-        user = User.query.filter_by(token=token).first()
-        if user is None or user.token_expiration < datetime.utcnow():
+    def verify_jwt(token):
+        try:
+            payload = jwt.decode(token, current_app.config['SECRET_KEY'], algorithm='HS256')
+        except (jwt.exceptions.ExpiredSignatureError, jwt.exceptions.InvalidSignatureError) as e:
             return None
 
-        return user
+        return User.query.get(payload.get('user_id'))
+
+    def ping(self):
+        self.last_access = datetime.utcnow()
+        db.session.add(self)
 
     def to_dict(self, include_email=False):
         data = {

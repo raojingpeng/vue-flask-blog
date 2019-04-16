@@ -50,7 +50,7 @@ export default {
       loginForm: {
         username: '',
         password: '',
-        // submitted: false,  // 是否点击了 submit 按钮
+        submitted: false,  // 是否点击了 submit 按钮
         errors: 0,  // 表单是否在前端验证通过，0 表示没有错误，验证通过
         usernameError: null,
         passwordError: null
@@ -59,7 +59,7 @@ export default {
   },
   methods: {
     onSubmit (e) {
-    //   this.loginForm.submitted = true  // 先更新状态
+      this.loginForm.submitted = true  // 先更新状态
       this.loginForm.errors = 0
       if (!this.loginForm.username) {
         this.loginForm.errors++

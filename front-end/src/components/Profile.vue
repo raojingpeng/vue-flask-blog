@@ -5,6 +5,7 @@
       v-bind:variant="alertVariant"
       v-bind:message="alertMessage">
     </alert>
+    <p>{{ $route.params.id }}</p>
     <button type="button" class="btn btn-primary">ProfilePage</button>
   </div>
 </template>
