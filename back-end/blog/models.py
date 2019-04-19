@@ -5,6 +5,7 @@
     :email: withrjp@gmail.com
 """
 import jwt
+import hashlib
 from datetime import datetime, timedelta
 from flask import url_for, current_app
 from blog.extensions import db
@@ -41,6 +42,10 @@ class User(PaginatedAPIMixin, db.Model):
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    name = db.Column(db.String(64))
+    location = db.Column(db.String(64))
+    about_me = db.Column(db.Text())
+    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_access = db.Column(db.DateTime(), default=datetime.utcnow)
 
     def set_password(self, password):
@@ -69,6 +74,11 @@ class User(PaginatedAPIMixin, db.Model):
 
         return User.query.get(payload.get('user_id'))
 
+    def gravatar(self, size):
+        """返回gravatar头像"""
+        digest = hashlib.md5(self.email.encode('utf-8')).hexdigest()
+        return 'https://www.gravatar.com/avatar/{}?d=identicon&s={}'.format(digest, size)
+
     def ping(self):
         self.last_access = datetime.utcnow()
         db.session.add(self)
@@ -77,8 +87,14 @@ class User(PaginatedAPIMixin, db.Model):
         data = {
             'id': self.id,
             'username': self.username,
+            'name': self.name,
+            'location': self.location,
+            'about_me': self.about_me,
+            'member_since': self.member_since.strftime('%Y-%m-%dT%H:%M:%SZ'),
+            'last_access': self.last_access.strftime('%Y-%m-%dT%H:%M:%SZ'),
             '_links': {
-                'self': url_for('api.get_user', id=self.id)
+                'self': url_for('api.get_user', id=self.id),
+                'gravatar': self.gravatar(128)
             }
         }
         if include_email:
@@ -87,7 +103,7 @@ class User(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data, new_user=False):
-        for field in 'username', 'email':
+        for field in ['username', 'email', 'name', 'location', 'about_me']:
             if field in data:
                 setattr(self, field, data[field])
         if new_user and 'password' in data:

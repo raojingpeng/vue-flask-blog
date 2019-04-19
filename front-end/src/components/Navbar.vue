@@ -57,7 +57,7 @@
         methods: {
             handleLogout: function () {
                 store.logoutAction()
-                this.$toasted.success(`Welcome ${name}!`, { icon : 'fingerprint' })
+                this.$toasted.info(`You have been successfully logged out!`, { icon : 'fingerprint' })
                 this.$router.push('/login')
             }
         }

@@ -4,7 +4,7 @@
     :github: https://github.com/raojingpeng
     :email: withrjp@gmail.com
 """
-from flask import g, jsonify
+from flask import g, jsonify, request
 from blog.api import api_bp
 from blog.api.auth import basic_auth
 

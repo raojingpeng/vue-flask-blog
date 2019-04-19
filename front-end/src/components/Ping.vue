@@ -16,7 +16,7 @@ import axios from 'axios'
     },
     methods: {
       getMessage() {
-        const path = 'http://127.0.0.1:5000/api/ping'
+        const path = '/ping'
         // eslint-disable-next-line
         axios.get(path).then(resolve => this.msg = resolve.data).catch(error => console.error(error))
       }

@@ -1,11 +1,14 @@
 import Vue from 'vue'
 import VueToasted from 'vue-toasted'
+import moment from 'moment'
 import App from './App.vue'
 import router from './router'
+import axios from './axios'
 import './assets/iconfonts/material-icons.css'
 import 'bootstrap/dist/css/bootstrap.css'
-
-Vue.config.productionTip = false
+//自定义 css 文件
+import './assets/core.css'
+import './assets/custom.css'
 
 Vue.use(VueToasted, {
   theme: 'bubble',
@@ -19,6 +22,10 @@ Vue.use(VueToasted, {
     }
   },
 });
+
+Vue.config.productionTip = false
+Vue.prototype.$moment = moment
+Vue.prototype.$axios = axios
 
 new Vue({
   router,
