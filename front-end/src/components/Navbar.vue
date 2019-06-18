@@ -1,65 +1,57 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="margin-bottom: 20px;">
-        <div class="container">
-            <router-link to="/" class="navbar-brand">Neko</router-link>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+  <v-toolbar
+    app
+    dark
+    color="primary"
+  >
+    <v-toolbar-side-icon></v-toolbar-side-icon>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
-                        <router-link to="/" class="nav-link">Home<span class="sr-only">(current)</span></router-link>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Explore</a>
-                    </li>
-                </ul>
+    <v-toolbar-title class="white--text">Neko</v-toolbar-title>
 
-                <form class="form-inline navbar-left mr-auto">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search">
-                    <!-- 暂时先禁止提交，后续实现搜索再改回 type="submit" -->
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
-                </form>
-
-                <ul v-if="sharedState.is_authenticated" class="nav navbar-nav navbar-right">
-                    <li class="nav-item">
-                        <a class="nav-link disabled" href="#">Messages</a>
-                    </li>
-                    <li class="nav-item">
-                        <router-link :to="{ name: 'Profile', params: { id: sharedState.user_id }}" class="nav-link">Profile</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <a @click="handleLogout" class="nav-link" href="#">Logout</a>
-                    </li>
-                </ul>
-                 <ul v-else class="nav navbar-nav navbar-right">
-                    <li class="nav-item">
-                        <router-link to="/login" class="nav-link">Login</router-link>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <v-spacer></v-spacer>
+    <v-toolbar-items>
+      <v-btn
+        flat
+        to="/"
+      >Home</v-btn>
+      <v-btn
+        flat
+        to="/about"
+      >About</v-btn>
+      <v-btn
+        v-if="sharedState.is_authenticated"
+        flat
+        @click="handleLogout"
+      >Logout
+        <v-icon right>fas fa-sign-out-alt</v-icon>
+      </v-btn>
+      <v-btn
+        v-else
+        flat
+        to="/login"
+      >Login
+        <v-icon right>fas fa-sign-in-alt</v-icon>
+      </v-btn>
+    </v-toolbar-items>
+  </v-toolbar>
 </template>
 
 <script>
-    import store from '../store.js'
+import store from '../store.js'
 
-    export default {
-        name: 'Navbar', //this is the name of the component
-        data () {
-            return {
-                sharedState: store.state
-            }
-        },
-        methods: {
-            handleLogout: function () {
-                store.logoutAction()
-                this.$toasted.info(`You have been successfully logged out!`, { icon : 'fingerprint' })
-                this.$router.push('/login')
-            }
-        }
+export default {
+  name: 'Navbar',
+  data() {
+    return {
+      sharedState: store.state
     }
+  },
+  methods: {
+    handleLogout() {
+      store.logoutAction()
+      this.$toasted.success(`你已成功登出!`)
+      this.$router.push('/login')
+    }
+  }
+}
 </script>

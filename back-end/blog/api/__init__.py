@@ -11,4 +11,4 @@ api_bp = Blueprint('api', __name__)
 CORS(api_bp)
 
 # 防止循环导入
-from blog.api import ping, users, tokens
+from blog.api import ping, users, posts, tokens

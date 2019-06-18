@@ -48,6 +48,8 @@ class User(PaginatedAPIMixin, db.Model):
     member_since = db.Column(db.DateTime(), default=datetime.utcnow)
     last_access = db.Column(db.DateTime(), default=datetime.utcnow)
 
+    posts = db.relationship('Post', back_populates='author', cascade='all, delete-orphan')
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -111,3 +113,40 @@ class User(PaginatedAPIMixin, db.Model):
 
     def __repr__(self):
         return '<User %s>' % self.username
+
+
+class Post(PaginatedAPIMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(255))
+    summary = db.Column(db.Text)
+    markdown = db.Column(db.Text)
+    html = db.Column(db.Text)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    views = db.Column(db.Integer, default=0)
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    author = db.relationship('User', back_populates='posts')
+
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'title': self.title,
+            'summary': self.summary,
+            'body': self.html,
+            'timestamp': self.timestamp,
+            'view': self.views,
+            'author': self.author.to_dict(),
+            '_links': {
+                'self': url_for('api.get_post', id=self.id),
+                'author_url': url_for('api.get_user', id=self.author.id)
+            }
+        }
+        return data
+
+    def from_dict(self, data):
+        for field in ['title', 'summary', 'body']:
+            if field in data:
+                setattr(self, field, data[field])
+
+    def __repr__(self):
+        return '<Post {}>'.format(self.title)

@@ -4,6 +4,7 @@
     :github: https://github.com/raojingpeng
     :email: withrjp@gmail.com
 """
+import time
 from flask import g
 from flask_httpauth import HTTPBasicAuth, HTTPTokenAuth
 from blog import db
@@ -17,6 +18,7 @@ token_auth = HTTPTokenAuth()
 @basic_auth.verify_password
 def verify_password(username, password):
     """检查提供的用户名与密码"""
+    time.sleep(3)
     user = User.query.filter_by(username=username).first()
     if user is None:
         return False

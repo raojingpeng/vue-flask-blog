@@ -1,53 +1,56 @@
-import Vue from 'vue'
 import axios from 'axios'
-import router from './router'
 import store from './store'
+import router from './router'
 
-// 基础配置
-axios.defaults.timeout = 5000  // 超时时间
-axios.defaults.baseURL = 'http://localhost:5000/api'
+axios.defaults.timeout = 5000 // 超时时间
+axios.defaults.baseURL = 'http://127.0.0.1:5000/api' // 发送请求地址
 
-// Add a request interceptor
-axios.interceptors.request.use(function (config) {
-  // Do something before request is sent
-  const token = window.localStorage.getItem('madblog-token')
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+// 添加请求拦截器
+axios.interceptors.request.use(
+  function (config) {
+    // 在发送请求之前做些什么
+    const token = window.localStorage.getItem('neko-blog')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+    return config
+  },
+  function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error)
   }
-  return config
-}, function (error) {
-  // Do something with request error
-  return Promise.reject(error)
-})
+)
 
-// Add a response interceptor
-axios.interceptors.response.use(function (response) {
-  // Do something with response data
-  return response
-}, function (error) {
-  // Do something with response error
-  switch  (error.response.status) {
-    case 401:
-      // 清除 Token 及 已认证 等状态
-      store.logoutAction()
-      // 跳转到登录页
-      if (router.currentRoute.path !== '/login') {
-        Vue.toasted.error('401: 认证已失效，请先登录', { icon: 'fingerprint' })
-        router.replace({
-          path: '/login',
-          query: { redirect: router.currentRoute.path },
-        })
-      }
-      break
-
-    case 404:
-    console.log(1)
-      Vue.toasted.error('404: NOT FOUND', { icon: 'fingerprint' })
-      console.log(1)
-      router.back()
-      break
+// 添加响应拦截器
+axios.interceptors.response.use(
+  function (response) {
+    // 对响应数据做点什么
+    return response
+  },
+  function (error) {
+    // 对响应错误做点什么
+    switch (error.response.status) {
+      case 401:
+        // 跳转到登录页
+        if (router.currentRoute.path !== '/login') {
+          // 清除 Token 及 已认证 等状态
+          store.logoutAction()
+          router.replace({
+            // TODO: toast提示
+            path: '/login',
+            query: {
+              redirect: router.currentRoute.path
+            }
+          })
+        }
+        break
+      case 404:
+        // TODO: toast提示
+        router.back()
+        break
+    }
+    return Promise.reject(error)
   }
-  return Promise.reject(error)
-})
+)
 
 export default axios
