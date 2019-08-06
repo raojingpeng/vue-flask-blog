@@ -2,7 +2,7 @@ a {
   text-decoration: none !important;
 }
 
-div.wechat {
+div.wechat, div.qq {
   padding: 0;
 }
 
