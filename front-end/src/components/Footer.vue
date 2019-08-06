@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="py-1">
     <v-layout
       row
       wrap
@@ -19,7 +19,7 @@
           <v-icon>fas fa-envelope</v-icon>
         </v-btn>
 
-        <v-tooltip top min-width="250px" id="qqq">
+        <v-tooltip top min-width="250px" content-class="wechat" nudge-top="8">
           <template v-slot:activator="{ on }">
             <v-btn
               flat

@@ -2,6 +2,10 @@ a {
   text-decoration: none !important;
 }
 
+div.wechat {
+  padding: 0;
+}
+
 code {
   color: inherit !important;
   font-weight: initial !important;

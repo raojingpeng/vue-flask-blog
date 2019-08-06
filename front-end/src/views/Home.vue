@@ -41,11 +41,11 @@
                   <div class="mt-2">
                     <v-tooltip left>
                       <template v-slot:activator="{ on }">
-                        <router-link
+                        <a
                           class="subheading green--text"
                           v-on="on"
-                          :to="{ name: 'about' }"
-                        >{{ post.author.name }}</router-link>
+                          href="#/about"
+                        >{{ post.author.name }}</a>
                       </template>
                       <span>作者</span>
                     </v-tooltip>
