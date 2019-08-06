@@ -26,7 +26,7 @@ Vue.use(Toasted, {
   // 主题样式 primary/outline/bubble
   theme: 'toasted-primary',
   // 显示在页面哪个位置
-  position: 'top-center',
+  position: 'top-right',
   // 显示多久时间（毫秒）
   duration: 3000,
   // 支持哪个图标集合

@@ -1,12 +1,8 @@
 <template>
-  <v-toolbar
-    app
-    dark
-    color="primary"
-  >
+  <v-toolbar>
     <v-toolbar-side-icon></v-toolbar-side-icon>
 
-    <v-toolbar-title class="white--text">Neko</v-toolbar-title>
+    <v-toolbar-title>Ackerman</v-toolbar-title>
 
     <v-spacer></v-spacer>
     <v-toolbar-items>
@@ -14,22 +10,27 @@
         flat
         to="/"
       >Home</v-btn>
+
       <v-btn
         flat
         to="/about"
       >About</v-btn>
+
       <v-btn
         v-if="sharedState.is_authenticated"
         flat
         @click="handleLogout"
-      >Logout
+      >
+        Logout
         <v-icon right>fas fa-sign-out-alt</v-icon>
       </v-btn>
+
       <v-btn
         v-else
         flat
         to="/login"
-      >Login
+      >
+        Login
         <v-icon right>fas fa-sign-in-alt</v-icon>
       </v-btn>
     </v-toolbar-items>
@@ -41,15 +42,11 @@ import store from '../store.js'
 
 export default {
   name: 'Navbar',
-  data() {
-    return {
-      sharedState: store.state
-    }
-  },
+  data: () => ({ sharedState: store.state }),
   methods: {
     handleLogout() {
       store.logoutAction()
-      this.$toasted.success(`你已成功登出!`)
+      this.$toasted.info(`你已成功登出!`)
       this.$router.push('/login')
     }
   }

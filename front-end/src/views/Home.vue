@@ -38,21 +38,22 @@
                       style="border: solid 1px transparent !important; border-color: #fff !important; border-width: 2px !important;"
                     >
                   </v-avatar>
-                  <div>
+                  <div class="mt-2">
                     <v-tooltip left>
                       <template v-slot:activator="{ on }">
-                        <span
-                          class="subheading"
+                        <router-link
+                          class="subheading green--text"
                           v-on="on"
-                        >{{ post.author.name }}</span>
+                          :to="{ name: 'about' }"
+                        >{{ post.author.name }}</router-link>
                       </template>
                       <span>作者</span>
                     </v-tooltip>
-                    <span class="grey--text pl-3">{{ $moment(post.timestamp).fromNow() }}</span>
+                    <span class="grey--text pl-2">{{ $moment(post.timestamp).fromNow() }}</span>
                   </div>
                 </div>
 
-                <v-card-title>
+                <v-card-title class="pt-1">
                   <div>
                     <router-link
                       class="headline mb-0 postlink"
@@ -80,18 +81,7 @@
         </v-layout>
       </v-flex>
 
-      <v-flex
-        xs12
-        md3
-      >
-        <v-card
-          dark
-          color="purple"
-        >
-          <v-card-text>右侧边栏目</v-card-text>
-        </v-card>
-
-      </v-flex>
+      <Sidebar />
 
       <v-flex
         xs6
@@ -111,6 +101,9 @@
 <script>
 export default {
   name: 'Home',
+  components: {
+    Sidebar: () => import("@/components/Sidebar")
+  },
   data: () => {
     return {
       posts: {
