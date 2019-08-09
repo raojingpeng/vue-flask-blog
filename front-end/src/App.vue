@@ -7,9 +7,7 @@
     </v-content>
 
     <BackToTop :offset="offset" />
-
     <v-divider></v-divider>
-    
     <Footer></Footer>
   </v-app>
 </template>
