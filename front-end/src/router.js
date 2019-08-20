@@ -43,7 +43,7 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  const token = window.localStorage.getItem('neko-token')
+  const token = window.localStorage.getItem('ackerman-token')
   if (to.matched.some(record => record.meta.requiresAuth) && (!token || token === null)) {
     Vue.toasted.show('Please log in to access this page.', {
       icon: 'fingerprint'

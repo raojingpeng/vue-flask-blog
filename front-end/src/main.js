@@ -10,6 +10,7 @@ import axios from './axios'
 // 导入 moment.js 用来格式化 UTC 时间为本地时间
 import moment from 'moment'
 import 'moment/locale/zh-cn'
+import VueSweetalert2 from 'vue-sweetalert2'
 // 导入 mavon-editor, markdown 样式
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
@@ -22,6 +23,7 @@ import '@/assets/custom.css'
 Vue.config.productionTip = false
 
 Vue.use(mavonEditor)
+Vue.use(VueSweetalert2)
 Vue.use(Toasted, {
   // 主题样式 primary/outline/bubble
   theme: 'toasted-primary',

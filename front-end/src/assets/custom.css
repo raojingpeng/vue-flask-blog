@@ -28,3 +28,8 @@ kbd:before {
 .postlink {
   text-decoration: none;
 }
+
+footer {
+  background: none !important;
+  color: inherit !important;
+}

@@ -1,6 +1,6 @@
 <template>
-  <footer class="container py-1">
-    <v-layout row justify-space-between style="align-items: center">
+  <v-footer height="auto" class="container py-1">
+  <v-layout row justify-space-between style="align-items: center">
 
       <span>&copy; Ackerman</span>
       <span>
@@ -70,7 +70,7 @@
       </span>
 
 </v-layout>
-  </footer>
+  </v-footer>
 </template>
 
 <script>

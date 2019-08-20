@@ -110,7 +110,7 @@ export default {
           )
           .then(response => {
             // 客户端记录token
-            window.localStorage.setItem('neko-token', response.data.token)
+            window.localStorage.setItem('ackerman-token', response.data.token)
             store.resetNotNewAction()
             store.loginAction()
             // 跳转至首页或重定向

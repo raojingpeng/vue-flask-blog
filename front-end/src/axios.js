@@ -9,7 +9,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:5000/api' // 发送请求地址
 axios.interceptors.request.use(
   function (config) {
     // 在发送请求之前做些什么
-    const token = window.localStorage.getItem('neko-blog')
+    const token = window.localStorage.getItem('ackerman-token')
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
